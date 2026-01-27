@@ -4,7 +4,7 @@ This repository contains a simplified but intentionally imperfect review & annot
 
 ## Running the project
 
-1. Ensure you are using **Node.js 20+** (see `.nvmrc` if provided).
+1. Ensure you are using **Node.js 20.17.0** (see `.nvmrc` if provided).
 2. Install dependencies:
 
    ```bash
