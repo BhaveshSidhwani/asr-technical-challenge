@@ -37,7 +37,7 @@ const statusToVariant: Record<
 
 export default function RecordCard({ record, onSelect }: RecordCardProps) {
   return (
-    <Card className="overflow-hidden border-border/60 hover:border-border hover:shadow-md transition-shadow">
+    <Card className="overflow-hidden border-border/60 hover:border-border hover:shadow-md transition-shadow flex flex-col">
       <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b">
         <div>
           <CardTitle className="text-base sm:text-lg tracking-tight">
@@ -53,14 +53,14 @@ export default function RecordCard({ record, onSelect }: RecordCardProps) {
           </Badge>
         </CardAction>
       </CardHeader>
-      {record.note && (
-        <CardContent>
-          <p className="text-xs sm:text-sm text-muted-foreground">
+      <CardContent className="flex-1">
+        {record.note && (
+          <p className="text-xs sm:text-sm text-muted-foreground pt-3">
             Note: {record.note}
           </p>
-        </CardContent>
-      )}
-      <CardFooter className="border-t pt-4 flex justify-end">
+        )}
+      </CardContent>
+      <CardFooter className="border-t pt-4 flex justify-end mt-auto">
         <Button variant="secondary" onClick={() => onSelect(record)}>
           Review
         </Button>

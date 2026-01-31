@@ -11,7 +11,7 @@ export default function RecordSummary() {
   const counts = useRecordCounts(records);
   return (
     <section aria-label="Record status summary" className="space-y-3">
-      <div className="flex items-baseline justify-between">
+      <div className="flex flex-col items-baseline justify-between">
         <h3 className="text-base sm:text-lg font-semibold tracking-tight">
           Summary
         </h3>

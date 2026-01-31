@@ -20,7 +20,7 @@ export default function PaginationControls({
   const totalPages = Math.max(1, Math.ceil(totalCount / limit));
 
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex flex-col items-center gap-3 border-t pt-4">
       <p className="text-sm text-muted-foreground">
         Page {page} of {totalPages}
       </p>

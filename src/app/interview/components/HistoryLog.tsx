@@ -17,7 +17,7 @@ export default function HistoryLog() {
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold">History</h3>
         {history.length > 0 && (
-          <Button variant="ghost" size="sm" onClick={clearHistory}>
+          <Button variant="outline" size="sm" onClick={clearHistory}>
             Clear
           </Button>
         )}
@@ -40,7 +40,7 @@ export default function HistoryLog() {
                 </span>
               </div>
               <div className="mt-1">
-                <span className="text-xs">
+                <span className="text-xs font-medium">
                   {entry.previousStatus} → {entry.newStatus}
                 </span>
               </div>

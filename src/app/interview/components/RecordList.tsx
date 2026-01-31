@@ -37,12 +37,9 @@ export default function RecordList() {
             {records.length} total • {display.length} showing
           </p>
         </div>
-        <div className="flex flex-col sm:flex-row gap-4">
-          <RecordFilter value={fltr} onChange={setFltr} />
-          <Button variant="ghost" onClick={() => refresh()} disabled={loading}>
-            Reload
-          </Button>
-        </div>
+        <Button variant="outline" onClick={() => refresh()} disabled={loading}>
+          Refresh Data
+        </Button>
       </div>
       {error && (
         <p className="text-sm text-destructive">
@@ -53,6 +50,9 @@ export default function RecordList() {
         <p className="text-sm text-muted-foreground">Loading records...</p>
       )}
       <RecordSummary />
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <RecordFilter value={fltr} onChange={setFltr} />
+      </div>
       {!loading && !error && display.length === 0 && records.length > 0 && (
         <p className="text-sm text-muted-foreground">
           No records match the current filter.
