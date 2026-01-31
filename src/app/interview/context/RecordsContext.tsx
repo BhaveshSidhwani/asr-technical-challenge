@@ -75,13 +75,16 @@ export function RecordsProvider({ children }: { children: React.ReactNode }) {
     setBusy(true);
     setErr(null);
     try {
-      const [pageData, allData] = await Promise.all([
-        getRecords({ page, limit }),
-        getRecords(),
-      ]);
+      const pageData = await getRecords({ page, limit });
       setData(pageData.records);
-      setAllRecords(allData.records);
-      setTotalCount(allData.totalCount);
+      setTotalCount(pageData.totalCount);
+
+      if (page === 1 && pageData.records.length === pageData.totalCount) {
+        setAllRecords(pageData.records);
+      } else {
+        const allData = await getRecords();
+        setAllRecords(allData.records);
+      }
     } catch (error) {
       const message = error instanceof Error ? error.message : "Unknown error";
       setErr(message);
