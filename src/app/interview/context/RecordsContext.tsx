@@ -23,6 +23,7 @@ const DEFAULT_PAGE_SIZE = 6;
 
 interface RecordsContextValue {
   records: RecordItem[];
+  allRecords: RecordItem[];
   totalCount: number;
   page: number;
   limit: number;
@@ -62,6 +63,7 @@ const RecordsContext = createContext<RecordsContextValue | undefined>(
 
 export function RecordsProvider({ children }: { children: React.ReactNode }) {
   const [data, setData] = useState<RecordItem[]>([]);
+  const [allRecords, setAllRecords] = useState<RecordItem[]>([]);
   const [totalCount, setTotalCount] = useState<number>(0);
   const [page, setPage] = useState<number>(DEFAULT_PAGE);
   const [limit] = useState<number>(DEFAULT_PAGE_SIZE);
@@ -73,9 +75,13 @@ export function RecordsProvider({ children }: { children: React.ReactNode }) {
     setBusy(true);
     setErr(null);
     try {
-      const incoming = await getRecords({ page, limit });
-      setData(incoming.records);
-      setTotalCount(incoming.totalCount);
+      const [pageData, allData] = await Promise.all([
+        getRecords({ page, limit }),
+        getRecords(),
+      ]);
+      setData(pageData.records);
+      setAllRecords(allData.records);
+      setTotalCount(allData.totalCount);
     } catch (error) {
       const message = error instanceof Error ? error.message : "Unknown error";
       setErr(message);
@@ -104,6 +110,9 @@ export function RecordsProvider({ children }: { children: React.ReactNode }) {
           });
           return prev.map((r) => (r.id === updated.id ? updated : r));
         });
+        setAllRecords((prev) =>
+          prev.map((r) => (r.id === updated.id ? updated : r)),
+        );
 
         setLog((prevHist) => (entry ? [...prevHist, entry] : prevHist));
       } catch (error) {
@@ -126,6 +135,7 @@ export function RecordsProvider({ children }: { children: React.ReactNode }) {
 
   const value = {
     records: data,
+    allRecords,
     totalCount,
     page,
     limit,

@@ -7,8 +7,8 @@ import { RECORD_STATUSES } from "../types";
  * provided by RecordsContext and renders them as a lightweight dashboard.
  */
 export default function RecordSummary() {
-  const { records } = useRecords();
-  const counts = useRecordCounts(records);
+  const { allRecords } = useRecords();
+  const counts = useRecordCounts(allRecords);
   return (
     <section aria-label="Record status summary" className="space-y-3">
       <div className="flex flex-col items-baseline justify-between">
