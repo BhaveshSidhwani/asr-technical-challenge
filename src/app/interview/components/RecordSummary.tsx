@@ -1,6 +1,7 @@
 import { useRecords } from "../context/RecordsContext";
 import { useRecordCounts } from "../hooks/useRecordCounts";
 import { RECORD_STATUSES } from "../types";
+import { formatStatusLabel } from "../utils/status";
 
 /**
  * RecordSummary computes derived counts by status from the current record set
@@ -28,7 +29,7 @@ export default function RecordSummary() {
               className="rounded-lg border bg-card/50 p-3 sm:p-4 flex flex-col items-center justify-center shadow-sm hover:bg-card transition-colors"
             >
               <span className="text-xs sm:text-sm font-medium capitalize text-muted-foreground">
-                {status.replace("_", " ")}
+                {formatStatusLabel(status)}
               </span>
               <span
                 className="text-xl sm:text-2xl font-bold mt-1 tracking-tight"
