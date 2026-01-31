@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-
 import {
   Dialog,
   DialogContent,
@@ -22,6 +20,7 @@ import {
 
 import { RECORD_STATUSES } from "../types";
 import type { RecordItem, RecordStatus } from "../types";
+import { useRecordReview } from "../hooks/useRecordReview";
 
 interface RecordDetailDialogProps {
   record: RecordItem;
@@ -38,9 +37,13 @@ export default function RecordDetailDialog({
   record,
   onClose,
 }: RecordDetailDialogProps) {
-  const [status, setStatus] = useState<RecordStatus>(record.status);
-  const [note, setNote] = useState<string>(record.note ?? "");
+  const { status, setStatus, note, setNote, isSaving, error, save } =
+    useRecordReview(record);
   const statusOptions: RecordStatus[] = [...RECORD_STATUSES];
+  const handleSave = async () => {
+    const success = await save();
+    if (success) onClose();
+  };
 
   return (
     <Dialog open onOpenChange={(open) => !open && onClose()}>
@@ -85,13 +88,18 @@ export default function RecordDetailDialog({
             <p className="mt-1 text-xs text-muted-foreground">
               Notes help other reviewers understand decisions.
             </p>
+            {error && (
+              <p className="mt-2 text-xs text-destructive">Error: {error}</p>
+            )}
           </div>
         </div>
         <DialogFooter className="mt-6">
           <Button variant="secondary" onClick={() => onClose()}>
             Close
           </Button>
-          <Button variant="default">Save</Button>
+          <Button variant="default" onClick={handleSave} disabled={isSaving}>
+            Save
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
