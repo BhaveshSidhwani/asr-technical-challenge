@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useRecords } from "../context/RecordsContext";
 import { useFilteredRecords } from "../hooks/useFilteredRecords";
 import { useRecordCounts } from "../hooks/useRecordCounts";
+import { RECORD_STATUSES } from "../types";
 import type { RecordItem } from "../types";
 import RecordCard from "./RecordCard";
 import RecordDetailDialog from "./RecordDetailDialog";
@@ -47,10 +48,11 @@ export default function RecordList() {
               className="w-full border rounded-md p-2 text-sm bg-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               <option value="all">all</option>
-              <option value="pending">pending</option>
-              <option value="approved">approved</option>
-              <option value="flagged">flagged</option>
-              <option value="needs_revision">needs_revision</option>
+              {RECORD_STATUSES.map((status) => (
+                <option key={status} value={status}>
+                  {status}
+                </option>
+              ))}
             </select>
           </div>
           <Button variant="ghost" onClick={() => refresh()} disabled={loading}>

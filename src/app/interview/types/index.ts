@@ -1,9 +1,19 @@
 /**
+ * Shared, runtime list of allowed record statuses. Keep this in sync with UI.
+ */
+export const RECORD_STATUSES = [
+  "pending",
+  "approved",
+  "flagged",
+  "needs_revision",
+] as const;
+
+/**
  * Definition of a record in the interview exercise. The records represent
  * specimens or observations collected from the field. The `status` field
  * reflects the current review state; `note` holds any reviewer notes.
  */
-export type RecordStatus = 'pending' | 'approved' | 'flagged' | 'needs_revision';
+export type RecordStatus = (typeof RECORD_STATUSES)[number];
 
 export interface RecordItem {
   id: string;

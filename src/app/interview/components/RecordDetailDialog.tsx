@@ -20,6 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+import { RECORD_STATUSES } from "../types";
 import type { RecordItem, RecordStatus } from "../types";
 
 interface RecordDetailDialogProps {
@@ -39,12 +40,7 @@ export default function RecordDetailDialog({
 }: RecordDetailDialogProps) {
   const [status, setStatus] = useState<RecordStatus>(record.status);
   const [note, setNote] = useState<string>(record.note ?? "");
-  const statusOptions: RecordStatus[] = [
-    "pending",
-    "approved",
-    "flagged",
-    "needs_revision",
-  ];
+  const statusOptions: RecordStatus[] = [...RECORD_STATUSES];
 
   return (
     <Dialog open onOpenChange={(open) => !open && onClose()}>
