@@ -24,8 +24,11 @@ export default function HistoryLog() {
         <p className="text-muted-foreground text-sm">No status changes yet.</p>
       ) : (
         <ul className="space-y-2 max-h-60 overflow-y-auto pr-2">
-          {history.map((entry, idx) => (
-            <li key={idx} className="text-sm border rounded-md p-2 bg-card">
+          {history.map((entry) => (
+            <li
+              key={`${entry.id}-${entry.timestamp}`}
+              className="text-sm border rounded-md p-2 bg-card"
+            >
               <div className="flex justify-between items-center">
                 <span className="font-medium">Record {entry.id}</span>
                 <span className="text-xs text-muted-foreground">
