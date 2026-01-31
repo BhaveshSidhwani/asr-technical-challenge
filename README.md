@@ -60,6 +60,24 @@ Deliverables for Phase 1:
 - Keep changes pragmatic - prefer small, reversible improvements that make responsibilities and data flow obvious.
 - Provide the refactored code implementing your proposed structure and patterns.
 
+---
+
+## Architecture (Phase 1 summary)
+
+This refactor follows a simple, feature-focused structure to keep responsibilities explicit:
+
+- **Service layer**: `src/app/interview/services/*` owns API I/O and hides fetch details.
+- **Context**: `RecordsContext` exposes state + actions (`records`, `history`, `loading`, `error`, `updateRecord`, `refresh`) without embedding networking logic.
+- **Hooks**: `useRecordCounts`, `useFilteredRecords`, and `useRecordReview` handle derived state and dialog behavior.
+- **Components**: `RecordList` acts as the container and composes presentational components like `RecordFilter`, `RecordSummary`, `RecordCard`, and `HistoryLog`.
+- **Utilities**: Small helpers such as `utils/history.ts` keep pure logic isolated and testable.
+
+### Patterns applied
+
+- service/repository layer
+- container/presenter separation
+- derived-state hooks
+
 ## Phase 2 – Extend & Design (to be implemented by the candidate)
 
 Implement the following functionality using the existing detail dialog dropdown and polish the user experience:
