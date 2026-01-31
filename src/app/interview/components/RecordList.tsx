@@ -10,6 +10,7 @@ import RecordDetailDialog from "./RecordDetailDialog";
 import RecordFilter from "./RecordFilter";
 import RecordSummary from "./RecordSummary";
 import HistoryLog from "./HistoryLog";
+import PaginationControls from "./PaginationControls";
 import { Button } from "@/components/ui/button";
 
 /**
@@ -18,7 +19,8 @@ import { Button } from "@/components/ui/button";
  * handling selection to open the detail dialog.
  */
 export default function RecordList() {
-  const { records, loading, error, refresh } = useRecords();
+  const { records, totalCount, page, limit, loading, error, refresh, setPage } =
+    useRecords();
   const [sel, setSel] = useState<RecordItem | null>(null);
   const [fltr, setFltr] = useState<"all" | RecordItem["status"]>("all");
 
@@ -57,6 +59,13 @@ export default function RecordList() {
           <RecordCard key={record.id} record={record} onSelect={setSel} />
         ))}
       </div>
+      <PaginationControls
+        page={page}
+        limit={limit}
+        totalCount={totalCount}
+        loading={loading}
+        onPageChange={setPage}
+      />
       {sel && <RecordDetailDialog record={sel} onClose={() => setSel(null)} />}
       {records.length === 0 && !loading && !error && (
         <p className="text-sm text-muted-foreground">No records found.</p>

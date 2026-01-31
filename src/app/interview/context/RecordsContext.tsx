@@ -18,8 +18,14 @@ import type { RecordItem, RecordStatus, RecordHistoryEntry } from "../types";
 import { getRecords, updateRecord } from "../services/records";
 import { buildHistoryEntry } from "../utils/history";
 
+const DEFAULT_PAGE = 1;
+const DEFAULT_PAGE_SIZE = 6;
+
 interface RecordsContextValue {
   records: RecordItem[];
+  totalCount: number;
+  page: number;
+  limit: number;
   loading: boolean;
   error: string | null;
   /**
@@ -35,6 +41,7 @@ interface RecordsContextValue {
    * or when you need the latest state.
    */
   refresh: () => Promise<void>;
+  setPage: (page: number) => void;
 
   /**
    * A log of record updates performed during this session. Each entry
@@ -55,6 +62,9 @@ const RecordsContext = createContext<RecordsContextValue | undefined>(
 
 export function RecordsProvider({ children }: { children: React.ReactNode }) {
   const [data, setData] = useState<RecordItem[]>([]);
+  const [totalCount, setTotalCount] = useState<number>(0);
+  const [page, setPage] = useState<number>(DEFAULT_PAGE);
+  const [limit] = useState<number>(DEFAULT_PAGE_SIZE);
   const [busy, setBusy] = useState<boolean>(false);
   const [err, setErr] = useState<string | null>(null);
   const [log, setLog] = useState<RecordHistoryEntry[]>([]);
@@ -63,15 +73,16 @@ export function RecordsProvider({ children }: { children: React.ReactNode }) {
     setBusy(true);
     setErr(null);
     try {
-      const incoming = await getRecords();
-      setData(incoming);
+      const incoming = await getRecords({ page, limit });
+      setData(incoming.records);
+      setTotalCount(incoming.totalCount);
     } catch (error) {
       const message = error instanceof Error ? error.message : "Unknown error";
       setErr(message);
     } finally {
       setBusy(false);
     }
-  }, []);
+  }, [limit, page]);
 
   useEffect(() => {
     loadData();
@@ -115,10 +126,14 @@ export function RecordsProvider({ children }: { children: React.ReactNode }) {
 
   const value = {
     records: data,
+    totalCount,
+    page,
+    limit,
     loading: busy,
     error: err,
     updateRecord: doUpdate,
     refresh: reLoad,
+    setPage,
     history: log,
     clearHistory: purgeLog,
   };

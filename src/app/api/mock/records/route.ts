@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import type { RecordItem, RecordStatus } from "@/app/interview/types";
 
 // Sample dataset. Feel free to extend with more realistic examples.
-let records: RecordItem[] = [
+const records: RecordItem[] = [
   {
     id: "1",
     name: "Anopheles gambiae ♀",
@@ -106,19 +106,47 @@ let records: RecordItem[] = [
  */
 
 // GET /api/mock/records
-export async function GET() {
-  return NextResponse.json(records);
+export async function GET(request: NextRequest) {
+  const { searchParams } = new URL(request.url);
+  const page = Number(searchParams.get("page") ?? "1");
+  const limit = Number(searchParams.get("limit") ?? String(records.length));
+  const MAX_LIMIT = 100;
+
+  if (
+    !Number.isFinite(page) ||
+    page < 1 ||
+    !Number.isFinite(limit) ||
+    limit < 1
+  ) {
+    return NextResponse.json(
+      { error: "Invalid pagination params" },
+      { status: 400 },
+    );
+  }
+
+  const boundedLimit = Math.min(limit, MAX_LIMIT);
+  const totalPages = Math.max(1, Math.ceil(records.length / boundedLimit));
+  const safePage = Math.min(page, totalPages);
+  const start = (safePage - 1) * boundedLimit;
+  const end = start + boundedLimit;
+
+  return NextResponse.json({
+    records: records.slice(start, end),
+    totalCount: records.length,
+  });
 }
 
 // PATCH /api/mock/records
 export async function PATCH(request: NextRequest) {
   try {
     const body = await request.json();
+
     const { id, status, note } = body as {
       id: string;
       status?: RecordStatus;
       note?: string;
     };
+
     const record = records.find((r) => r.id === id);
     if (!record) {
       return NextResponse.json(
@@ -126,10 +154,13 @@ export async function PATCH(request: NextRequest) {
         { status: 404 },
       );
     }
+
     if (status) record.status = status;
     if (note !== undefined) record.note = note;
+
     return NextResponse.json(record);
   } catch (error) {
+    console.error("Error processing PATCH /api/mock/records:", error);
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   }
 }
