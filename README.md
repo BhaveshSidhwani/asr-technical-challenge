@@ -89,6 +89,24 @@ This refactor follows a simple, feature-focused structure to keep responsibiliti
 - Fetch only the latest slice for the UI, with “Load more” if needed
 - Support server-side filtering to avoid transferring and filtering large histories on the client
 
+---
+
+## Known issues
+
+### Filter + pagination mismatch
+
+**Issue**  
+When a status filter is active, pagination still reflects the unfiltered
+dataset. This can lead to sparse pages (e.g., 2 results on page 1, 1 on page 2)
+even if more matches exist in total.
+
+**Reason**  
+Filtering is applied client-side on the current page, while pagination is
+computed server-side on the full dataset.
+
+**Resolution**  
+Implement server-side filtering (filter before pagination)
+
 ## Phase 2 – Extend & Design (to be implemented by the candidate)
 
 Implement the following functionality using the existing detail dialog dropdown and polish the user experience:
