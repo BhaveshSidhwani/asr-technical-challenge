@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import {
   Dialog,
   DialogContent,
@@ -38,6 +39,7 @@ export default function RecordDetailDialog({
   record,
   onClose,
 }: RecordDetailDialogProps) {
+  const closeTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const {
     status,
     setStatus,
@@ -53,9 +55,16 @@ export default function RecordDetailDialog({
   const handleSave = async () => {
     const success = await save();
     if (success) {
-      setTimeout(() => onClose(), 400);
+      closeTimeout.current = setTimeout(() => onClose(), 400);
     }
   };
+  useEffect(() => {
+    return () => {
+      if (closeTimeout.current) {
+        clearTimeout(closeTimeout.current);
+      }
+    };
+  }, []);
 
   return (
     <Dialog open onOpenChange={(open) => !open && onClose()}>
