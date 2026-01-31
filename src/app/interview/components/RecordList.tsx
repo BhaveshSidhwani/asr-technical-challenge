@@ -34,7 +34,7 @@ export default function RecordList() {
             Records
           </h2>
           <p className="text-sm text-muted-foreground">
-            {records.length} total • {display.length} showing
+            {totalCount} total • {display.length} showing
           </p>
         </div>
         <Button variant="outline" onClick={() => refresh()} disabled={loading}>
