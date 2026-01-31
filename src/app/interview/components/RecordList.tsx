@@ -3,6 +3,8 @@
 import { useState } from "react";
 
 import { useRecords } from "../context/RecordsContext";
+import { useFilteredRecords } from "../hooks/useFilteredRecords";
+import { useRecordCounts } from "../hooks/useRecordCounts";
 import type { RecordItem } from "../types";
 import RecordCard from "./RecordCard";
 import RecordDetailDialog from "./RecordDetailDialog";
@@ -18,17 +20,8 @@ export default function RecordList() {
   const [sel, setSel] = useState<RecordItem | null>(null);
   const [fltr, setFltr] = useState<"all" | RecordItem["status"]>("all");
 
-  const counts: Record<RecordItem["status"], number> = {
-    pending: 0,
-    approved: 0,
-    flagged: 0,
-    needs_revision: 0,
-  };
-  records.forEach((item) => {
-    counts[item.status] += 1;
-  });
-
-  const display = records;
+  const counts = useRecordCounts(records);
+  const display = useFilteredRecords(records, fltr);
 
   return (
     <div className="space-y-6">

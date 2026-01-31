@@ -1,5 +1,6 @@
-import type { RecordStatus } from "../types";
 import { useRecords } from "../context/RecordsContext";
+import { useRecordCounts } from "../hooks/useRecordCounts";
+import type { RecordStatus } from "../types";
 
 /**
  * RecordSummary computes derived counts by status from the current record set
@@ -7,14 +8,7 @@ import { useRecords } from "../context/RecordsContext";
  */
 export default function RecordSummary() {
   const { records } = useRecords();
-  // Compute counts for each status
-  const counts = records.reduce(
-    (acc, record) => {
-      acc[record.status] = (acc[record.status] ?? 0) + 1;
-      return acc;
-    },
-    {} as Record<RecordStatus, number>,
-  );
+  const counts = useRecordCounts(records);
   const statuses: RecordStatus[] = [
     "pending",
     "approved",
