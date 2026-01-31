@@ -5,6 +5,7 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
+import { RECORD_STATUSES } from "../types";
 import type { RecordStatus } from "../types";
 
 /**
@@ -18,13 +19,7 @@ interface RecordFilterProps {
 }
 
 export default function RecordFilter({ value, onChange }: RecordFilterProps) {
-  const options: ("all" | RecordStatus)[] = [
-    "all",
-    "pending",
-    "approved",
-    "flagged",
-    "needs_revision",
-  ];
+  const options: ("all" | RecordStatus)[] = ["all", ...RECORD_STATUSES];
   return (
     <div className="w-56">
       <label className="block text-sm font-medium mb-1">Filter by status</label>
