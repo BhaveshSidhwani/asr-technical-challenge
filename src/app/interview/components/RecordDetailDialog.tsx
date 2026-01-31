@@ -94,6 +94,11 @@ export default function RecordDetailDialog({
           </div>
         </div>
         <DialogFooter className="mt-6">
+          {isSaving && (
+            <p className="text-xs text-muted-foreground mr-auto">
+              Saving changes...
+            </p>
+          )}
           <Button variant="secondary" onClick={() => onClose()}>
             Close
           </Button>
