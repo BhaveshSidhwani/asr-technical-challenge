@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import type { RecordItem, RecordStatus } from "../types";
 import { useRecords } from "./useRecords";
@@ -10,6 +10,16 @@ export function useRecordReview(record: RecordItem) {
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
+  const validationMessage = useMemo(() => {
+    if (
+      (status === "flagged" || status === "needs_revision") &&
+      note.trim().length === 0
+    ) {
+      return "A note is required when flagging or requesting revision.";
+    }
+    return null;
+  }, [note, status]);
+
   useEffect(() => {
     setStatus(record.status);
     setNote(record.note ?? "");
@@ -19,6 +29,11 @@ export function useRecordReview(record: RecordItem) {
   const save = useCallback(async (): Promise<boolean> => {
     setIsSaving(true);
     setError(null);
+    if (validationMessage) {
+      setError(validationMessage);
+      setIsSaving(false);
+      return false;
+    }
     try {
       await updateRecord(record.id, { status, note });
       return true;
@@ -29,7 +44,7 @@ export function useRecordReview(record: RecordItem) {
     } finally {
       setIsSaving(false);
     }
-  }, [note, record.id, status, updateRecord]);
+  }, [note, record.id, status, updateRecord, validationMessage]);
 
   return {
     status,
@@ -38,6 +53,7 @@ export function useRecordReview(record: RecordItem) {
     setNote,
     isSaving,
     error,
+    validationMessage,
     save,
   };
 }

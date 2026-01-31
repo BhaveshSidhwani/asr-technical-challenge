@@ -18,9 +18,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { RECORD_STATUSES } from "../types";
+import { REVIEW_STATUSES } from "../types";
 import type { RecordItem, RecordStatus } from "../types";
 import { useRecordReview } from "../hooks/useRecordReview";
+import { formatStatusLabel } from "../utils/status";
 
 interface RecordDetailDialogProps {
   record: RecordItem;
@@ -37,9 +38,17 @@ export default function RecordDetailDialog({
   record,
   onClose,
 }: RecordDetailDialogProps) {
-  const { status, setStatus, note, setNote, isSaving, error, save } =
-    useRecordReview(record);
-  const statusOptions: RecordStatus[] = [...RECORD_STATUSES];
+  const {
+    status,
+    setStatus,
+    note,
+    setNote,
+    isSaving,
+    error,
+    validationMessage,
+    save,
+  } = useRecordReview(record);
+  const statusOptions: RecordStatus[] = [...REVIEW_STATUSES];
   const handleSave = async () => {
     const success = await save();
     if (success) onClose();
@@ -68,8 +77,12 @@ export default function RecordDetailDialog({
               </SelectTrigger>
               <SelectContent>
                 {statusOptions.map((option) => (
-                  <SelectItem key={option} value={option}>
-                    {option}
+                  <SelectItem
+                    key={option}
+                    value={option}
+                    className="capitalize"
+                  >
+                    {formatStatusLabel(option)}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -88,7 +101,12 @@ export default function RecordDetailDialog({
             <p className="mt-1 text-xs text-muted-foreground">
               Notes help other reviewers understand decisions.
             </p>
-            {error && (
+            {validationMessage && (
+              <p className="mt-2 text-xs text-destructive">
+                {validationMessage}
+              </p>
+            )}
+            {error && !validationMessage && (
               <p className="mt-2 text-xs text-destructive">Error: {error}</p>
             )}
           </div>
@@ -102,7 +120,11 @@ export default function RecordDetailDialog({
           <Button variant="secondary" onClick={() => onClose()}>
             Close
           </Button>
-          <Button variant="default" onClick={handleSave} disabled={isSaving}>
+          <Button
+            variant="default"
+            onClick={handleSave}
+            disabled={isSaving || Boolean(validationMessage)}
+          >
             Save
           </Button>
         </DialogFooter>

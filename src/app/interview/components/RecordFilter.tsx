@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/select";
 import { RECORD_STATUSES } from "../types";
 import type { RecordStatus } from "../types";
+import { formatStatusLabel } from "../utils/status";
 
 /**
  * RecordFilter provides a status selection UI decoupled from the records list
@@ -33,7 +34,7 @@ export default function RecordFilter({ value, onChange }: RecordFilterProps) {
         <SelectContent>
           {options.map((opt) => (
             <SelectItem key={opt} value={opt} className="capitalize">
-              {opt === "all" ? "All" : opt.replace("_", " ")}
+              {opt === "all" ? "All" : formatStatusLabel(opt)}
             </SelectItem>
           ))}
         </SelectContent>

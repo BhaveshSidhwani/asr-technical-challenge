@@ -8,6 +8,12 @@ export const RECORD_STATUSES = [
   "needs_revision",
 ] as const;
 
+export const REVIEW_STATUSES = [
+  "approved",
+  "flagged",
+  "needs_revision",
+] as const;
+
 /**
  * Definition of a record in the interview exercise. The records represent
  * specimens or observations collected from the field. The `status` field
