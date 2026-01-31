@@ -12,6 +12,7 @@ import type { VariantProps } from "class-variance-authority";
 import { Button } from "@/components/ui/button";
 
 import type { RecordItem } from "@/app/interview/types";
+import { formatStatusLabel } from "@/app/interview/utils/status";
 
 interface RecordCardProps {
   record: RecordItem;
@@ -48,7 +49,7 @@ export default function RecordCard({ record, onSelect }: RecordCardProps) {
         </div>
         <CardAction>
           <Badge variant={statusToVariant[record.status]}>
-            {record.status}
+            {formatStatusLabel(record.status)}
           </Badge>
         </CardAction>
       </CardHeader>
