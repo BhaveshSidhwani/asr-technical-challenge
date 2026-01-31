@@ -47,6 +47,11 @@ export default function RecordList() {
         <p className="text-sm text-muted-foreground">Loading records...</p>
       )}
       <RecordSummary />
+      {!loading && !error && display.length === 0 && records.length > 0 && (
+        <p className="text-sm text-muted-foreground">
+          No records match the current filter.
+        </p>
+      )}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {display.map((record) => (
           <RecordCard key={record.id} record={record} onSelect={setSel} />
