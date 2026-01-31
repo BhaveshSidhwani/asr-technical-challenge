@@ -27,7 +27,7 @@ export default function RecordList() {
   const display = useFilteredRecords(records, fltr);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
         <div>
           <h2 className="text-xl sm:text-2xl font-semibold tracking-tight">
@@ -44,7 +44,11 @@ export default function RecordList() {
           </Button>
         </div>
       </div>
-      {error && <p className="text-sm text-destructive">Error: {error}</p>}
+      {error && (
+        <p className="text-sm text-destructive">
+          Something went wrong loading records. {error}
+        </p>
+      )}
       {loading && (
         <p className="text-sm text-muted-foreground">Loading records...</p>
       )}

@@ -23,7 +23,9 @@ export default function HistoryLog() {
         )}
       </div>
       {history.length === 0 ? (
-        <p className="text-muted-foreground text-sm">No status changes yet.</p>
+        <p className="text-muted-foreground text-sm">
+          No status changes yet. Updates will appear here.
+        </p>
       ) : (
         <ul className="space-y-2 max-h-60 overflow-y-auto pr-2">
           {ordered.map((entry) => (

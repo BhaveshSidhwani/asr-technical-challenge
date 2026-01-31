@@ -37,7 +37,7 @@ const statusToVariant: Record<
 
 export default function RecordCard({ record, onSelect }: RecordCardProps) {
   return (
-    <Card className="overflow-hidden hover:shadow-sm transition-shadow">
+    <Card className="overflow-hidden border-border/60 hover:border-border hover:shadow-md transition-shadow">
       <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b">
         <div>
           <CardTitle className="text-base sm:text-lg tracking-tight">

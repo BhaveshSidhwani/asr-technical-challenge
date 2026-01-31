@@ -114,7 +114,7 @@ export default function RecordDetailDialog({
         <DialogFooter className="mt-6">
           {isSaving && (
             <p className="text-xs text-muted-foreground mr-auto">
-              Saving changes...
+              Saving changes... please wait.
             </p>
           )}
           <Button variant="secondary" onClick={() => onClose()}>
