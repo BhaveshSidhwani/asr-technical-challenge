@@ -78,6 +78,17 @@ This refactor follows a simple, feature-focused structure to keep responsibiliti
 - container/presenter separation
 - derived-state hooks
 
+---
+
+### History scalability note
+
+**Production approach**
+
+- Persist history entries server-side on a database or append-only log store
+- Page or virtualize the history list
+- Fetch only the latest slice for the UI, with “Load more” if needed
+- Support server-side filtering to avoid transferring and filtering large histories on the client
+
 ## Phase 2 – Extend & Design (to be implemented by the candidate)
 
 Implement the following functionality using the existing detail dialog dropdown and polish the user experience:

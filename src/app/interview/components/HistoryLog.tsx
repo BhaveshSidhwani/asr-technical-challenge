@@ -1,4 +1,5 @@
 import { useRecords } from "../context/RecordsContext";
+import { useOrderedHistory } from "../hooks/useOrderedHistory";
 import { Button } from "@/components/ui/button";
 
 /**
@@ -10,6 +11,7 @@ import { Button } from "@/components/ui/button";
  */
 export default function HistoryLog() {
   const { history, clearHistory } = useRecords();
+  const ordered = useOrderedHistory(history);
   return (
     <div className="space-y-3 mt-6">
       <div className="flex items-center justify-between">
@@ -24,7 +26,7 @@ export default function HistoryLog() {
         <p className="text-muted-foreground text-sm">No status changes yet.</p>
       ) : (
         <ul className="space-y-2 max-h-60 overflow-y-auto pr-2">
-          {history.map((entry) => (
+          {ordered.map((entry) => (
             <li
               key={`${entry.id}-${entry.timestamp}`}
               className="text-sm border rounded-md p-2 bg-card"
