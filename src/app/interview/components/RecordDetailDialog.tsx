@@ -46,12 +46,15 @@ export default function RecordDetailDialog({
     isSaving,
     error,
     validationMessage,
+    successMessage,
     save,
   } = useRecordReview(record);
   const statusOptions: RecordStatus[] = [...REVIEW_STATUSES];
   const handleSave = async () => {
     const success = await save();
-    if (success) onClose();
+    if (success) {
+      setTimeout(() => onClose(), 400);
+    }
   };
 
   return (
@@ -116,6 +119,9 @@ export default function RecordDetailDialog({
             <p className="text-xs text-muted-foreground mr-auto">
               Saving changes... please wait.
             </p>
+          )}
+          {successMessage && !isSaving && (
+            <p className="text-xs text-emerald-600 mr-auto">{successMessage}</p>
           )}
           <Button variant="secondary" onClick={() => onClose()}>
             Close

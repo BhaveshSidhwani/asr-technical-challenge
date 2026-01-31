@@ -9,6 +9,7 @@ export function useRecordReview(record: RecordItem) {
   const [note, setNote] = useState<string>(record.note ?? "");
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const validationMessage = useMemo(() => {
     if (
@@ -24,11 +25,13 @@ export function useRecordReview(record: RecordItem) {
     setStatus(record.status);
     setNote(record.note ?? "");
     setError(null);
+    setSuccessMessage(null);
   }, [record.id, record.note, record.status]);
 
   const save = useCallback(async (): Promise<boolean> => {
     setIsSaving(true);
     setError(null);
+    setSuccessMessage(null);
     if (validationMessage) {
       setError(validationMessage);
       setIsSaving(false);
@@ -36,6 +39,7 @@ export function useRecordReview(record: RecordItem) {
     }
     try {
       await updateRecord(record.id, { status, note });
+      setSuccessMessage("Saved successfully.");
       return true;
     } catch (err) {
       const message = err instanceof Error ? err.message : "Unknown error";
@@ -54,6 +58,7 @@ export function useRecordReview(record: RecordItem) {
     isSaving,
     error,
     validationMessage,
+    successMessage,
     save,
   };
 }

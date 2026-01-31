@@ -16,8 +16,32 @@ function createFetchMock(records: RecordItem[]) {
     const method = init?.method ?? "GET";
 
     if (method === "GET") {
+      const url =
+        typeof _input === "string"
+          ? _input
+          : _input instanceof Request
+            ? _input.url
+            : _input.toString();
+      const hasQuery = url.includes("?");
+      if (!hasQuery) {
+        return new Response(
+          JSON.stringify({ records, totalCount: records.length }),
+          { status: 200 },
+        );
+      }
+
+      const parsed = new URL(url, "http://localhost");
+      const page = Number(parsed.searchParams.get("page") ?? "1");
+      const limit = Number(
+        parsed.searchParams.get("limit") ?? String(records.length),
+      );
+      const start = (page - 1) * limit;
+      const end = start + limit;
       return new Response(
-        JSON.stringify({ records, totalCount: records.length }),
+        JSON.stringify({
+          records: records.slice(start, end),
+          totalCount: records.length,
+        }),
         { status: 200 },
       );
     }
