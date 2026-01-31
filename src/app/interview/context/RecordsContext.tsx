@@ -16,6 +16,7 @@ import React, {
 } from "react";
 import type { RecordItem, RecordStatus, RecordHistoryEntry } from "../types";
 import { getRecords, updateRecord } from "../services/records";
+import { buildHistoryEntry } from "../utils/history";
 
 interface RecordsContextValue {
   records: RecordItem[];
@@ -81,23 +82,19 @@ export function RecordsProvider({ children }: { children: React.ReactNode }) {
       setErr(null);
       try {
         const updated = await updateRecord({ id, ...updates });
-        setData((prev) => prev.map((r) => (r.id === updated.id ? updated : r)));
 
-        const prevRecord = data.find((r) => r.id === id);
-        if (
-          prevRecord &&
-          updates.status &&
-          prevRecord.status !== updates.status
-        ) {
-          const entry: RecordHistoryEntry = {
-            id,
-            previousStatus: prevRecord.status,
-            newStatus: updates.status,
+        let entry: RecordHistoryEntry | null = null;
+        setData((prev) => {
+          const previousRecord = prev.find((r) => r.id === updated.id);
+          entry = buildHistoryEntry({
+            previous: previousRecord,
+            next: updated,
             note: updates.note,
-            timestamp: new Date().toISOString(),
-          };
-          setLog((prevHist) => [...prevHist, entry]);
-        }
+          });
+          return prev.map((r) => (r.id === updated.id ? updated : r));
+        });
+
+        setLog((prevHist) => (entry ? [...prevHist, entry] : prevHist));
       } catch (error) {
         const message =
           error instanceof Error ? error.message : "Unknown error";
@@ -105,7 +102,7 @@ export function RecordsProvider({ children }: { children: React.ReactNode }) {
         throw error;
       }
     },
-    [data],
+    [],
   );
 
   const reLoad = useCallback(async () => {
