@@ -14,6 +14,6 @@ describe("RecordCard", () => {
     const onSelect = vi.fn();
     render(<RecordCard record={sample} onSelect={onSelect} />);
     expect(screen.getByText("Specimen A")).toBeInTheDocument();
-    expect(screen.getByText("pending")).toBeInTheDocument();
+    expect(screen.getByText("Pending")).toBeInTheDocument();
   });
 });
